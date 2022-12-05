@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+$bg_color_light: #ecf0f3;
+$text_color_light: #181818;
+$bg_color_dark: #343639;
+$text_color_dark: #f3f3f3;
+$bg_color: $bg_color_light;
+$text_color: $text_color_light;
+$font_family: "Quicksand", sans-serif;
+
+body {
+  margin: 0;
+  padding: 0;
+  background: $bg_color;
+  font-family: $font_family;
+  color: $text_color;
+}
+
+*:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
