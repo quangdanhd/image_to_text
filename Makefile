@@ -6,6 +6,8 @@ help: ## Display this help.
 ##@ Development
 0: ## npm run serve
 	npm run serve
+build: ## npm run build
+	npm run build
 v-p: ## view port: make v-p p=8080
 	sudo lsof -i :$(p)
 k-p: ## kill port: make k-p p=12345
