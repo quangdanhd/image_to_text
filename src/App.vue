@@ -31,6 +31,7 @@
                 >upload a file</span
               ><span class="ms-2">OR</span>
               <input
+                @change="changeFile"
                 ref="fileInput"
                 class="form-control d-none"
                 type="file"
@@ -42,11 +43,13 @@
               <div class="row g-2">
                 <div class="col-8">
                   <input
+                    @paste="imagePaste($event)"
                     v-model="imgLink"
                     type="text"
                     class="form-control"
                     placeholder="Paste image link"
                     :disabled="loading"
+                    autofocus
                   />
                 </div>
                 <div class="col-4">
@@ -124,6 +127,7 @@ export default {
       ],
       activeLang: "eng",
       // img
+      imgWatch: false,
       imgLink: null,
       imgPreview: null,
       imgLoadError: false,
@@ -139,6 +143,37 @@ export default {
   methods: {
     langChange(key) {
       this.activeLang = key;
+    },
+    changeFile(e) {
+      const file = e.target.files[0];
+      this.clean();
+      this.imgPreview = URL.createObjectURL(file);
+      this.imageRecognition(file);
+    },
+    clean() {
+      this.message = null;
+      this.loading = true;
+      this.imgLoadError = false;
+      this.textResult = null;
+    },
+    imagePaste(e) {
+      const dT = e.clipboardData || window.clipboardData;
+      if (typeof dT.files[0] == "undefined") {
+        this.imgWatch = !this.imgWatch;
+      } else {
+        const file = dT.files[0];
+        const fileType = file["type"];
+        const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+        if (!validImageTypes.includes(fileType)) {
+          this.error = true;
+          this.message =
+            "The file format is not an image file. Please check again.";
+          return;
+        }
+        this.clean();
+        this.imgPreview = URL.createObjectURL(file);
+        this.imageRecognition(file);
+      }
     },
     imageChanged() {
       if (!this.imgLink) {
@@ -176,8 +211,12 @@ export default {
       this.imgLoadError = true;
       e.target.src = require("./assets/error.png");
     },
-    imageRecognition() {
-      Tesseract.recognize(this.imgPreview, this.activeLang, {
+    imageRecognition(file = null) {
+      let img = this.imgPreview;
+      if (file) {
+        img = file;
+      }
+      Tesseract.recognize(img, this.activeLang, {
         logger: (m) => {
           console.log(m);
         },
@@ -188,6 +227,7 @@ export default {
     },
     submitRecognition(e) {
       e.preventDefault();
+      this.imageChanged();
     },
     copyText() {
       this.copied = true;
@@ -204,8 +244,10 @@ export default {
     },
   },
   watch: {
-    imgLink() {
-      this.imageChanged();
+    imgWatch() {
+      setTimeout(() => {
+        this.imageChanged();
+      }, 100);
     },
   },
 };
