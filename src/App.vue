@@ -47,7 +47,7 @@
                     v-model="imgLink"
                     type="text"
                     class="form-control"
-                    placeholder="Paste image link"
+                    placeholder="Paste image or paste image link"
                     :disabled="loading"
                     autofocus
                   />
