@@ -1,6 +1,6 @@
 <template>
   <div class="p-3 pt-2 image-to-text">
-    <div class="mb-2 fs-4 fw-bold">Image to Text</div>
+    <div class="mb-2 fs-4">Text<b>Recognition</b></div>
     <div class="row g-3">
       <div class="col-12 col-md-5 left">
         <!--Type-->
